@@ -56,6 +56,8 @@ namespace GuestBook.Controllers
             item.Id = 0;
             item.Browser = HttpContext.Request.Headers["User-Agent"].ToString();
 
+            item.Ip = null;
+
             if (item.Ip == null) item.Ip = HttpContext.Connection.LocalIpAddress.ToString();
 
             var count = DatabaseService?.Create(item);

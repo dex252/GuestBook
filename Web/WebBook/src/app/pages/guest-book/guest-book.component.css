@@ -120,3 +120,14 @@ tr.mat-footer-cell {
   -webkit-hyphens: auto;
   hyphens: auto;
 }
+
+.mat-open-dialog{
+  float: right;
+  background-color: coral;
+  color: black;
+  height: 100%;
+}
+
+mat-form-field {
+  width: 100%;
+}

@@ -1,9 +1,10 @@
-import { Component, OnInit, Injectable, Input } from '@angular/core';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { Component, OnInit, Inject } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { FormControl, Validators, ReactiveFormsModule, FormsModule} from '@angular/forms';
 
 import { ApiService } from '../../services/api.service';
 import { Message } from '../../models/message';
-import { cwd } from 'process';
 import { Column } from '../../models/table.enum';
 
 @Component({
@@ -30,7 +31,11 @@ export class GuestBookComponent implements OnInit {
 
   displayedColumns = ["userName", "email", "created", "text"];
 
-  constructor(private route: ActivatedRoute, private router: Router, private api: ApiService) {
+  constructor(
+    public dialog: MatDialog,
+    private route: ActivatedRoute, 
+    private router: Router, 
+    private api: ApiService) {
   }
 
   ngOnInit(): void {
@@ -89,19 +94,83 @@ export class GuestBookComponent implements OnInit {
     this.router.navigateByUrl(`/guestbook/${this.sort}/${this.column}/${(Number(this.page))}`);
   }
 
-  post(){
-    this.api.getIPAddress().subscribe((ip: string)=> {
-      console.log(ip);
-      this.messages[0].Ip = ip;
-      console.log(this.messages[0]);
-      this.api.postMessage(this.messages[0]).subscribe(()=>{
+  openDialog(): void{
+    let dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
+      width: '50%',
+      minWidth: '300px'
+    });
 
-      }, e=>console.log(e.message));
-  }, e => {
-    console.log(e.message);
-    this.api.postMessage(this.messages[0]).subscribe(()=>{
-
-    }, e=>console.log(e.message));
-  });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      
+    });
   }
+
+}
+
+@Component({
+  selector: 'dialog-overview-example-dialog',
+  templateUrl: 'dialog-overview-example-dialog.html',
+  styleUrls: ['./guest-book.component.css']
+})
+export class DialogOverviewExampleDialog {
+
+  message: Message;
+
+  emailFormControl = new FormControl('', [
+    Validators.required,
+    Validators.email,
+  ]);
+
+  nameFormControl = new FormControl('', [
+    Validators.required,
+    Validators.minLength(3)
+  ]);
+
+  textFormControl = new FormControl('', [
+    Validators.required,
+    Validators.minLength(1)
+  ]);
+
+  constructor(
+    public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
+    private api: ApiService,
+    @Inject(MAT_DIALOG_DATA) public data: any) { 
+      this.message = new Message();
+      this.message.Text = "";
+      this.message.UserName = "";
+      this.message.Email = "";
+    }
+
+    cancelButton(): void {
+    this.dialogRef.close();
+    }
+
+    clearFields(){
+      this.message.UserName = "";
+      this.message.Email = "";
+      this.message.Text = "";
+
+      this.nameFormControl.setValue("");
+      this.emailFormControl.setValue("");
+      this.textFormControl.setValue("");
+    } 
+
+    sendMessage(){
+      this.message.UserName =  this.nameFormControl.value;
+      this.message.Email =  this.emailFormControl.value;
+      this.message.Text =  this.textFormControl.value;
+    }
+
+    post(){
+      this.api.getIPAddress().subscribe((ip: string)=> {
+        this.message.Ip = ip;
+        this.api.postMessage(this.message).subscribe(()=>{
+        }, e=>console.log(e.message));
+    }, e => {
+      console.log(e.message);
+      this.api.postMessage(this.message).subscribe(()=>{
+      }, e=>console.log(e.message));
+      });
+    }
 }

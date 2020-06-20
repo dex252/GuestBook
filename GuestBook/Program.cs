@@ -15,6 +15,8 @@ namespace GuestBook
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    //TODO: change ip for any pc
+                    //webBuilder.UseUrls("http://192.168.0.105:5000/");
                 });
     }
 }

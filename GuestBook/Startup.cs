@@ -35,10 +35,10 @@ namespace GuestBook
                 options.AddPolicy(name: SpecificOrigins,
                     builder =>
                     {
-                            builder
-                                .WithOrigins("*")
-                                .WithMethods("POST", "GET")
-                                .WithHeaders("*");
+                        builder
+                            .WithMethods("POST", "GET")
+                            .AllowAnyHeader()
+                            .AllowAnyOrigin();
                     });
             });
         }
