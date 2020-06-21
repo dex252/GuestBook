@@ -53,34 +53,49 @@ export class GuestBookComponent implements OnInit {
         this.messages = messages;
         this.Equals();
       }, error => {
+        this.Equals();
         console.log(error.message);
       });
     }, error => {
+      this.countPages = 0;
       console.log(error.message);
     });
   }
 
   public Equals() {
-    if (this.countPages == this.page) {
+   
+    if (this.countPages == this.page || this.countPages == 0) {
       this.fowardDisabled = true;
     } else this.fowardDisabled = false;
-
-    if (this.page == this.minPage) {
+    
+    if (this.page == this.minPage || this.countPages == 0) {
       this.backDisabled = true;
     } else this.backDisabled = false;
 
+    if (this.countPages != 0 && this.countPages < this.page){
+      this.page = this.countPages;
+      this.download();
+    
+      this.router.navigateByUrl(`/guestbook/${this.sort}/${this.column}/${(Number(this.page))}`); 
+    }
+
+    if (this.countPages != 0 && this.page <=0){
+      this.page = this.minPage;
+      this.download();
+    
+      this.router.navigateByUrl(`/guestbook/${this.sort}/${this.column}/${(Number(this.page))}`); 
+    }
   }
 
   sortData(column: Column) {
     if (Number(this.column) == Number(column)) 
     if (Number(this.sort) == 0) this.sort = 1; else this.sort = 0;
     this.column = column;
+    this.page = 1 ;
     this.download();
     
     this.router.navigateByUrl(`/guestbook/${this.sort}/${this.column}/${(Number(this.page))}`); 
     }
-
-
 
   public backButton() {
     this.page = (Number(this.page) - 1 );
@@ -101,8 +116,7 @@ export class GuestBookComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      
+      if (result != undefined) this.download();
     });
   }
 
@@ -119,17 +133,22 @@ export class DialogOverviewExampleDialog {
 
   emailFormControl = new FormControl('', [
     Validators.required,
-    Validators.email,
+    Validators.pattern('[.\\-_a-z0-9]+@([a-z0-9][\\-a-z0-9]+\\.)+[a-z]{2,6}')
   ]);
-
+  
   nameFormControl = new FormControl('', [
     Validators.required,
-    Validators.minLength(3)
+    Validators.pattern('[A-Za-z0-9\\s]{3,}')
   ]);
 
   textFormControl = new FormControl('', [
     Validators.required,
-    Validators.minLength(1)
+    Validators.minLength(1),
+    Validators.pattern('^((?!\/\>).)*$')
+  ]);
+
+  homePageFormControl = new FormControl('', [
+    Validators.pattern('https://.*|http://.*')
   ]);
 
   constructor(
@@ -140,9 +159,10 @@ export class DialogOverviewExampleDialog {
       this.message.Text = "";
       this.message.UserName = "";
       this.message.Email = "";
+      this.message.HomePage = "";
     }
 
-    cancelButton(): void {
+    cancelButton(): any {
     this.dialogRef.close();
     }
 
@@ -150,27 +170,27 @@ export class DialogOverviewExampleDialog {
       this.message.UserName = "";
       this.message.Email = "";
       this.message.Text = "";
+      this.message.HomePage = "";
 
       this.nameFormControl.setValue("");
       this.emailFormControl.setValue("");
       this.textFormControl.setValue("");
+      this.homePageFormControl.setValue("");
     } 
 
-    sendMessage(){
-      this.message.UserName =  this.nameFormControl.value;
-      this.message.Email =  this.emailFormControl.value;
-      this.message.Text =  this.textFormControl.value;
+    async sendMessage(){
+      this.message.UserName =  await this.nameFormControl.value;
+      this.message.Email =  await this.emailFormControl.value;
+      this.message.Text =  await this.textFormControl.value;
+      this.message.HomePage =  await this.homePageFormControl.value;
+
+      await this.post();
     }
 
-    post(){
-      this.api.getIPAddress().subscribe((ip: string)=> {
-        this.message.Ip = ip;
+    post(): any{
         this.api.postMessage(this.message).subscribe(()=>{
+          this.dialogRef.close(true);
         }, e=>console.log(e.message));
-    }, e => {
-      console.log(e.message);
-      this.api.postMessage(this.message).subscribe(()=>{
-      }, e=>console.log(e.message));
-      });
     }
+    
 }

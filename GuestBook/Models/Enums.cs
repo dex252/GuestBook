@@ -1,14 +1,8 @@
 ﻿namespace SolerORM.Models
 {
-    public enum Sort
-    {
-        Asc,
-        Desc
-    }
-
     public enum Column
     {
-        Username,
+        UserName,
         Email,
         Created
     }

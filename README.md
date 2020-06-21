@@ -3,9 +3,12 @@
 Инструкция для Windows (запуск локальной версии)
 
 1.	БД (в процессе)
-	-	Убедиться в наличии установленной MySql 8.0 [Офф. сайт](https://dev.mysql.com/downloads/windows/installer/8.0.html), [прямая ссылка](https://drive.google.com/file/d/1tZqq3g82t8zI91oXylV8w0ocRpisnyZR/view?usp=sharing)
-	-	Перейти в папку с установленной mysql, стандартный путь: C:\Program Files\MySQL\MySQL Server 8.0\bin  и выполнить в консоли команду mysql.exe -u<имя_пользователя> -p
-	-	Ввести пароль, далее прописать    /<путь к>/messagebase.sql , файл с дампом расположен в папке dump в корне проекта 
+	-	Убедиться в наличии установленной MySql 8.0 [ссылка](https://dev.mysql.com/downloads/windows/installer/8.0.html)
+	-	Первый вариант (консоль) - в этом случае китайские предложения будут утеряны
+		-	Перейти в папку с установленной mysql, стандартный путь: C:\Program Files\MySQL\MySQL Server 8.0\bin  и выполнить в консоли команду mysql.exe -u<имя_пользователя> -p
+		-	Ввести пароль, далее прописать    /<путь к>/messagebase.sql , файл с дампом расположен в папке dump в корне проекта 
+	-	Второй вариант (через Toad или аналогичный ему клиент)	[ссылка](https://www.toadworld.com/)
+		-	Создать новый запрос, скопировать содержимое дампа в него и запустить все запросы (F5) (иллюстации в папке с дампами)
 2.	Rest
 	-	Убедиться в наличии установленного Net Core 3.1 [ссылка](https://dotnet.microsoft.com/download/dotnet-core/3.1)
 	-	Перейти в корень папки GuestBook (там расположен файл GuestBook.csproj)

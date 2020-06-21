@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError, retry, timeout, map } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { timeout, map } from 'rxjs/operators';
 import { environment } from '../../environments/environment.prod';
 
 import { Sort, Column } from '../models/table.enum';
@@ -28,8 +28,9 @@ export class ApiService {
     return this.http.post<Boolean>(`${environment.url}/api/message`, message).pipe(timeout(10000));
   }
 
+  //TODO: insecure
   getIPAddress(): Observable<any> 
   {  
-    return this.http.get<any>("http://api.ipify.org/?format=json").pipe(map(p=> {return p.ip;}));  
+    return this.http.get<any>("http://api.ipify.org/?format=json").pipe(map(data=> {return data.ip;}));  
   } 
 }

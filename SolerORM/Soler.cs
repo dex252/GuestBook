@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Reflection;
+using SolerORM.Models;
 
 namespace SolerORM
 {
@@ -88,32 +89,15 @@ namespace SolerORM
         /// <param name="length"></param>
         /// <param name="transaction"></param>
         /// <returns></returns>
-        public static IEnumerable<T> GetSortLimit<T>(this IDbConnection connection, string columnName, string sort,
+        public static IEnumerable<T> GetSortLimit<T>(this IDbConnection connection, string columnName, Sort sort,
             ulong startIndex, ulong length, IDbTransaction transaction = null)
         {
             using var command = connection.CreateCommand();
+         
+            if (!typeof(T).GetProperties().Select(e => e.Name).Contains(columnName)) yield break;
+
             var sql =
-                $"select * from {typeof(T).TableName()} order by @columnName @sort limit @startIndex, @length";
-
-            var commandParameterColumnName = command.CreateParameter();
-            commandParameterColumnName.ParameterName = "columnName";
-            commandParameterColumnName.Value = columnName;
-            command.Parameters.Add(commandParameterColumnName);
-
-            var commandParameterSort = command.CreateParameter();
-            commandParameterSort.ParameterName = "sort";
-            commandParameterSort.Value = sort;
-            command.Parameters.Add(commandParameterSort);
-
-            var commandParameterStartIndex = command.CreateParameter();
-            commandParameterStartIndex.ParameterName = "startIndex";
-            commandParameterStartIndex.Value = startIndex;
-            command.Parameters.Add(commandParameterStartIndex);
-
-            var commandParameterLength = command.CreateParameter();
-            commandParameterLength.ParameterName = "length";
-            commandParameterLength.Value = length;
-            command.Parameters.Add(commandParameterLength);
+                $"select * from {typeof(T).TableName()} order by {columnName} {sort} limit {startIndex}, {length}";
 
             command.CommandText = sql;
             command.Transaction = transaction;
@@ -122,7 +106,7 @@ namespace SolerORM
             using var reader = command.ExecuteReader();
             while (reader.Read())
             {
-                var row = (T) Activator.CreateInstance(typeof(T));
+                var row = (T)Activator.CreateInstance(typeof(T));
                 foreach (var prop in typeof(T).GetProperties().Where(prop => prop.GetCustomAttribute<ReadIgnore>() == null))
                 {
                     var value = reader[prop.Name];
@@ -132,6 +116,7 @@ namespace SolerORM
 
                 yield return row;
             }
+
         }
 
         /// <summary>

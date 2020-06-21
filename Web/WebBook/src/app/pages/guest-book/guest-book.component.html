@@ -1,15 +1,8 @@
-<!-- <mat-form-field class="example-form-field">
-    <mat-label>Имя</mat-label>
-    <input matInput type="text" [(ngModel)]="value">
-    <button mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
-      <mat-icon>close</mat-icon>
-    </button>
-  </mat-form-field> -->
-
   <div class="form-fill-flex">
     <div class="form-body">
       <table mat-table class="mat-elevation-z8 form-body-table" [dataSource]="messages">
         <cdk-virtual-scroll-viewport [itemSize]="25"></cdk-virtual-scroll-viewport>
+
         <ng-container matColumnDef="userName" class = "mat-column-username">
           <th mat-header-cell *matHeaderCellDef (click)="sortData(0)"> Name </th>
           <td mat-cell *matCellDef="let message"> {{message.userName}} </td>
@@ -23,7 +16,7 @@
 
     <ng-container matColumnDef="created" class = "mat-column-date" >
       <th mat-header-cell *matHeaderCellDef (click)="sortData(2)"> Date </th>
-      <td mat-cell *matCellDef="let message"> {{message.created | date:'MM/dd/yyyy  hh:mm'}}</td>
+      <td mat-cell *matCellDef="let message"> {{message.created | date:'MM/dd/yyyy  hh:mm:ss'}}</td>
     </ng-container>
 
     <ng-container matColumnDef="text" class = "mat-column-text">
@@ -55,7 +48,7 @@
       </td>
     </ng-container>
     <tr mat-footer-row *matFooterRowDef="['disclaimer'] sticky: true" class="footer-row"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns;"></tr>
  
       </table>
     </div>

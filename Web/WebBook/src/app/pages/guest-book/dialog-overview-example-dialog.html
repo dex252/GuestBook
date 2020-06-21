@@ -2,36 +2,47 @@
 <div mat-dialog-content>
   <mat-form-field>
     <mat-label>Name</mat-label>
-    <input matInput maxlength="100" 
-            placeholder="Enter your name here" 
-            [formControl]="nameFormControl" 
-            style="width: 100%;">
-    <mat-hint align="start">{{nameFormControl.value?.length}} / 100</mat-hint>
+    <input matInput maxlength="50" placeholder="Enter your name here" [formControl]="nameFormControl">
+    <mat-hint align="start">{{nameFormControl.value?.length}} / 50</mat-hint>
     <mat-error *ngIf="nameFormControl.hasError('required')">
-        <mat-hint align="end">{{nameFormControl.value?.length}} / 100</mat-hint> Name is <strong>less</strong> then 3 symbols
+        <mat-hint align="end">{{nameFormControl.value?.length}} / 50</mat-hint> Name is <strong>empty</strong>
     </mat-error>
+    <mat-error *ngIf="nameFormControl.hasError('pattern')">
+      <mat-hint align="end">{{nameFormControl.value?.length}} / 50</mat-hint> Name is <strong>less</strong> then 3 symbols or contains invalid characters
+  </mat-error>
   </mat-form-field>
 
   <mat-form-field>
     <mat-label>Email</mat-label>
-    <input matInput [formControl]="emailFormControl" placeholder="Enter your name here">
-    <mat-hint align="start">{{emailFormControl.value?.length}} / 100</mat-hint>
-    <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
-        <mat-hint align="end">{{emailFormControl.value?.length}} / 100</mat-hint> Please enter a valid email address 
+    <input matInput maxlength="50" [formControl]="emailFormControl" placeholder="Enter your name here">
+    <mat-hint align="start">{{emailFormControl.value?.length}} / 50</mat-hint>
+    <mat-error *ngIf="emailFormControl.hasError('pattern') && !emailFormControl.hasError('required')">
+        <mat-hint align="end">{{emailFormControl.value?.length}} / 50</mat-hint> Please enter a valid email address 
     </mat-error>
     <mat-error *ngIf="emailFormControl.hasError('required')">
-        <mat-hint align="end">{{emailFormControl.value?.length}} / 100</mat-hint> Email is <strong>required</strong> 
+        <mat-hint align="end">{{emailFormControl.value?.length}} / 50</mat-hint> Email is <strong>required</strong> 
     </mat-error>
   </mat-form-field>
 
+  <mat-form-field>
+    <mat-label>HomePage</mat-label>
+    <input type="url" matInput maxlength="100"  [formControl]="homePageFormControl" placeholder="Enter your home page">
+    <mat-hint align="start">{{homePageFormControl.value?.length}} / 100</mat-hint>
+    <mat-error *ngIf="homePageFormControl.hasError('pattern')">
+      <mat-hint align="end">{{homePageFormControl.value?.length}} / 100</mat-hint> Url is <strong>not valid</strong>
+  </mat-error>
+  </mat-form-field>
 
   <mat-form-field>
     <mat-label>Message</mat-label>
-    <textarea matInput maxlength="400"   [formControl]="textFormControl" ></textarea>
-    <mat-hint align="start">{{textFormControl.value?.length}} / 400</mat-hint>
+    <textarea matInput maxlength="300"   [formControl]="textFormControl" placeholder="Enter your message"></textarea>
+    <mat-hint align="start">{{textFormControl.value?.length}} / 300</mat-hint>
     <mat-error *ngIf="textFormControl.hasError('required')">
-        <mat-hint align="end">{{textFormControl.value?.length}} / 100</mat-hint> Text is <strong>empty</strong> 
+        <mat-hint align="end">{{textFormControl.value?.length}} / 300</mat-hint> Text is <strong>empty</strong> 
     </mat-error>
+    <mat-error *ngIf="textFormControl.hasError('pattern')">
+      <mat-hint align="end">{{textFormControl.value?.length}} / 300</mat-hint> Text don't must contains<strong>html tags</strong> 
+  </mat-error>
   </mat-form-field>
 
 </div>

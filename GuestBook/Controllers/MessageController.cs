@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
 using GuestBook.Services;
+using GuestBook.Validation;
 using Microsoft.AspNetCore.Mvc;
 using SolerORM.Models;
 
@@ -55,10 +58,9 @@ namespace GuestBook.Controllers
         {
             item.Id = 0;
             item.Browser = HttpContext.Request.Headers["User-Agent"].ToString();
-
-            item.Ip = null;
-
-            if (item.Ip == null) item.Ip = HttpContext.Connection.LocalIpAddress.ToString();
+            item.Ip = HttpContext.Connection.RemoteIpAddress.ToString();
+         
+            if (!new Validator<Message>((new MessageRule())).Validate(item)) return BadRequest();
 
             var count = DatabaseService?.Create(item);
 

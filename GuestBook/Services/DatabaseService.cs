@@ -7,10 +7,10 @@ using SolerORM.Models;
 
 namespace GuestBook.Services
 {
-    public class DatabaseContext: IDatabaseService
+    public class DatabaseService: IDatabaseService
     {
         private string ConnectionString { get; }
-        public DatabaseContext(string connectionString)
+        public DatabaseService(string connectionString)
         {
             this.ConnectionString = connectionString;
         }
@@ -42,7 +42,7 @@ namespace GuestBook.Services
 
             conn.Open();
 
-            var items = conn.GetSortLimit<T>(column.ToString(), sort.ToString(),  startIndex, length);
+            var items = conn.GetSortLimit<T>(column.ToString(), sort,  startIndex, length);
 
             return items.ToList();
         }

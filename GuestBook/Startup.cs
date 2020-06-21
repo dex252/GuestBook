@@ -27,8 +27,8 @@ namespace GuestBook
         {
             services.AddControllers();
 
-            services.AddScoped<IDatabaseService, DatabaseContext>(provider =>
-                new DatabaseContext(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddScoped<IDatabaseService, DatabaseService>(provider =>
+                new DatabaseService(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddCors(options =>
             {
