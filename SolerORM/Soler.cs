@@ -93,7 +93,28 @@ namespace SolerORM
         {
             using var command = connection.CreateCommand();
             var sql =
-                $"select * from {typeof(T).TableName()} order by {columnName} {sort} limit {startIndex}, {length}";
+                $"select * from {typeof(T).TableName()} order by @columnName @sort limit @startIndex, @length";
+
+            var commandParameterColumnName = command.CreateParameter();
+            commandParameterColumnName.ParameterName = "columnName";
+            commandParameterColumnName.Value = columnName;
+            command.Parameters.Add(commandParameterColumnName);
+
+            var commandParameterSort = command.CreateParameter();
+            commandParameterSort.ParameterName = "sort";
+            commandParameterSort.Value = sort;
+            command.Parameters.Add(commandParameterSort);
+
+            var commandParameterStartIndex = command.CreateParameter();
+            commandParameterStartIndex.ParameterName = "startIndex";
+            commandParameterStartIndex.Value = startIndex;
+            command.Parameters.Add(commandParameterStartIndex);
+
+            var commandParameterLength = command.CreateParameter();
+            commandParameterLength.ParameterName = "length";
+            commandParameterLength.Value = length;
+            command.Parameters.Add(commandParameterLength);
+
             command.CommandText = sql;
             command.Transaction = transaction;
             command.CommandType = CommandType.Text;
