@@ -8,7 +8,7 @@
 		-	Перейти в папку с установленной mysql, стандартный путь: C:\Program Files\MySQL\MySQL Server 8.0\bin  и выполнить в консоли команду mysql.exe -u<имя_пользователя> -p
 		-	Ввести пароль, прописать   create database messagebase;
 		-	exit
-		-	mysqldump.exe -u<имя_пользователя> -p messagebase < /path/dump/messagebase.sql
+		-	mysql.exe -u<имя_пользователя> -p messagebase < /path/dump/messagebase.sql
 	-	Второй вариант (через Toad или аналогичный ему клиент)	[ссылка](https://www.toadworld.com/)
 		-	Создать новый запрос, скопировать содержимое дампа в него и запустить все запросы (F5) (иллюстации в папке с дампами)
 2.	Rest
