@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
+﻿using System.Collections.Generic;
 using GuestBook.Services;
 using GuestBook.Validation;
 using Microsoft.AspNetCore.Mvc;
@@ -59,7 +57,7 @@ namespace GuestBook.Controllers
             item.Id = 0;
             item.Browser = HttpContext.Request.Headers["User-Agent"].ToString();
             item.Ip = HttpContext.Connection.RemoteIpAddress.ToString();
-         
+
             if (!new Validator<Message>((new MessageRule())).Validate(item)) return BadRequest();
 
             var count = DatabaseService?.Create(item);
