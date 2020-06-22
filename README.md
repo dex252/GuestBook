@@ -4,11 +4,11 @@
 
 1.	БД
 	-	Убедиться в наличии установленной MySql 8.0 [ссылка](https://dev.mysql.com/downloads/windows/installer/8.0.html)
-	-	Первый вариант (консоль) - в этом случае китайские предложения будут утеряны
+	-	Первый вариант (консоль)
 		-	Перейти в папку с установленной mysql, стандартный путь: C:\Program Files\MySQL\MySQL Server 8.0\bin  и выполнить в консоли команду mysql.exe -u<имя_пользователя> -p
 		-	Ввести пароль, прописать   create database messagebase;
 		-	exit
-		-	mysql.exe -u<имя_пользователя> -p messagebase < /path/dump/messagebase.sql
+		-	mysql.exe -u<имя_пользователя> -p --default-character-set=utf8  messagebase < /path/dump/messagebase.sql
 	-	Второй вариант (через Toad или аналогичный ему клиент)	[ссылка](https://www.toadworld.com/)
 		-	Создать новый запрос, скопировать содержимое дампа в него и запустить все запросы (F5) (иллюстации в папке с дампами)
 2.	Rest
